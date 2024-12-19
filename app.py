@@ -1,16 +1,20 @@
 from flask import Flask, request, render_template, redirect, url_for
 import pyodbc
+import os
 
 app = Flask(__name__)
+
+
+
 
 # Connect to SQL Server
 def get_db_connection():
     conn_str = (
-        "DRIVER={ODBC Driver 17 for SQL Server};"
-        "SERVER=WANI-SOB\\MSSQLSERVER01;"
-        "DATABASE=;"
-        "UID=sa;"
-        "PWD=Server@123"
+        f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+        f"SERVER={os.getenv('SQL_SERVER')};"
+        f"DATABASE={os.getenv('SQL_DATABASE')};"
+        f"UID={os.getenv('SQL_USERNAME')};"
+        f"PWD={os.getenv('SQL_PASSWORD')}"
     )
     conn = pyodbc.connect(conn_str)
     return conn
@@ -39,4 +43,4 @@ def submit():
     return "Name and Roll Number are required.", 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
